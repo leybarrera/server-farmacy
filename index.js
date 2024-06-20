@@ -1,47 +1,15 @@
-import 'dotenv/config'
-import express from "express";
-import cors from 'cors'
-import morgan from "morgan";
-import nodemailer from 'nodemailer'
-
-
-const PORT = process.env.PORT ?? 3000
-
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true, // Use `true` for port 465, `false` for all other ports
-    auth: {
-      user: "nyellove1998@gmail.com",
-      pass: process.env.EMAIL_PASSWORD
-    },
-  });
-
-const server = express()
-
-
-server.use(morgan("dev"))
-server.use(express.json())
-server.use(cors())
-
-
-server.post("/sendEmail",async (req,res) => {
-    const {nombre,email, mensaje} = req.body
-    console.log(nombre,email,mensaje)
-    transporter.sendMail({
-        from: "nyellove1998@gmail.com",
-        to: email,
-        subject: "BUENASALUD",
-        text: `Hola, ${nombre} te saludamos de BUENASALUD hemos recibio tu mensaje: "${mensaje}". pronto responderemos a tu petición`
+import server from './src/server.js'
+import { PORT } from './src/config/config.js'
+import { conn } from './src/lib/connection.js'
+const port = PORT ?? 3000
+conn
+  .sync({ logging: false, force: false })
+  .then(() => {
+    console.log('Base de datos conectada')
+    server.listen(port, () => {
+      console.log(`Server listening in: http://localhost:${port}`)
     })
-
-    res.send("Email enviado")
-})
-
-server.get("/",(req,res)=> {
-    res.send("Hola")
-})
-
-server.listen(PORT,()=> {
-    console.log("Server listening")
-})
+  })
+  .catch((err) => {
+    console.log('Error en la conexión: ', err.message)
+  })
