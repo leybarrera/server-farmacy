@@ -1,8 +1,8 @@
-import { DataTypes } from 'sequelize'
+import { DataTypes } from "sequelize";
 
 const UsuarioModel = (conn) => {
   conn.define(
-    'Usuario',
+    "Usuario",
     {
       id: {
         type: DataTypes.UUID,
@@ -11,7 +11,6 @@ const UsuarioModel = (conn) => {
       },
       cedula: {
         type: DataTypes.STRING,
-        allowNull: false,
         unique: true,
       },
       nombre: {
@@ -20,7 +19,6 @@ const UsuarioModel = (conn) => {
       },
       apellido: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       email: {
         type: DataTypes.STRING,
@@ -36,18 +34,17 @@ const UsuarioModel = (conn) => {
       },
       fecha_nacimiento: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       sexo: {
         type: DataTypes.ENUM,
-        allowNull: false,
-        values: ['male', 'female', 'custom'],
+        values: ["male", "female", "custom"],
+        defaultValue: "custom",
       },
     },
     {
       timestamps: false,
     }
-  )
-}
+  );
+};
 
-export default UsuarioModel
+export default UsuarioModel;

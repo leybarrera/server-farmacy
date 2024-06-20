@@ -1,8 +1,9 @@
-import { ventaControllers } from '../controllers/index.controllers.js'
-import { Router } from 'express'
+import { ventaControllers } from "../controllers/index.controllers.js";
+import { Router } from "express";
 
-const ventaRouter = Router()
+const ventaRouter = Router();
 
-ventaRouter.get('/', ventaControllers.listarVentas)
+ventaRouter.get("/", ventaControllers.listarVentas);
+ventaRouter.post("/", ventaControllers.crearVenta);
 
-export default ventaRouter
+export default ventaRouter;

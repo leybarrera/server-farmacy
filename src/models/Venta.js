@@ -1,8 +1,8 @@
-import { DataTypes } from 'sequelize'
+import { DataTypes } from "sequelize";
 
 const VentaModel = (conn) => {
   conn.define(
-    'Venta',
+    "Venta",
     {
       id: {
         type: DataTypes.UUID,
@@ -20,21 +20,21 @@ const VentaModel = (conn) => {
       },
       fecha: {
         type: DataTypes.DATE,
-        allowNull: false,
+        defaultValue: Date.now(),
       },
       ProductId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Productos',
-          key: 'id',
+          model: "Productos",
+          key: "id",
         },
       },
     },
     {
       timestamps: false,
     }
-  )
-}
+  );
+};
 
-export default VentaModel
+export default VentaModel;
