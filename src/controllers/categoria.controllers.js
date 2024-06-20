@@ -13,7 +13,7 @@ const crearCategoria = async (req, res) => {
       defaults: { nombre },
     });
     return created
-      ? req.status(200).json({
+      ? res.status(200).json({
           message: "Categoría creada con éxito",
         })
       : res.status(400).json({
