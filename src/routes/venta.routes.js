@@ -5,5 +5,8 @@ const ventaRouter = Router();
 
 ventaRouter.get("/", ventaControllers.listarVentas);
 ventaRouter.post("/", ventaControllers.crearVenta);
+ventaRouter.delete("/delete/:id", ventaControllers.borrarVenta);
+
+ventaRouter.post("/confirm", ventaControllers.saleProducts);
 
 export default ventaRouter;

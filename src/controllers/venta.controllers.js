@@ -1,3 +1,4 @@
+import nodemailer from "../helpers/nodemailer/index.js";
 import { Venta } from "../lib/connection.js";
 
 const crearVenta = async (req, res) => {
@@ -17,7 +18,7 @@ const crearVenta = async (req, res) => {
           message: "Error al crear la venta. Intente de nuevo.",
         });
   } catch (error) {
-    return req.status(500).json({
+    return res.status(500).json({
       message: "Error interno en el servidor",
     });
   }
@@ -28,10 +29,44 @@ const listarVentas = async (req, res) => {
     const ventas = await Venta.findAll({});
     return res.status(200).json({ ventas });
   } catch (error) {
-    return req.status(500).json({
+    return res.status(500).json({
       message: "Error interno en el servidor",
     });
   }
 };
 
-export default { listarVentas, crearVenta };
+const borrarVenta = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteVentas = await Venta.destroy({
+      where: { id },
+    });
+    return deleteVentas > 0
+      ? res.status(201).json({
+          message: "Venta eliminada",
+        })
+      : res.status(400).json({
+          message: "No se pudo eliminar la vent",
+        });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error interno en el servidor",
+    });
+  }
+};
+
+const saleProducts = async (req, res) => {
+  try {
+    const { to, name, cart } = req.body;
+    nodemailer.saleNotification(to, name, cart);
+    return res.status(200).json({
+      message: "Compra realizada con éxito",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error interno en el servidor",
+    });
+  }
+};
+
+export default { listarVentas, crearVenta, borrarVenta, saleProducts };

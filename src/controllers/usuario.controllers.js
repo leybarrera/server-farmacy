@@ -73,6 +73,8 @@ const login = async (req, res) => {
         apellido: usuario.apellido,
         fecha_nacimiento: usuario.fecha_nacimiento,
         sexo: usuario.sexo,
+        email: usuario.email,
+        rol: usuario.rol,
       },
     });
   } catch (error) {
@@ -93,4 +95,24 @@ const listarUsuarios = async (req, res) => {
   }
 };
 
-export default { registrarUsuario, login, listarUsuarios };
+const borrarUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteUsers = await Usuario.destroy({
+      where: { id },
+    });
+    return deleteUsers > 0
+      ? res.status(201).json({
+          message: "Usuario elimiando",
+        })
+      : res.status(400).json({
+          message: "No se pudo eliminar al usuario",
+        });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error interno en el servidor",
+    });
+  }
+};
+
+export default { registrarUsuario, login, listarUsuarios, borrarUsuario };

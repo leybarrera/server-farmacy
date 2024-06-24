@@ -1,5 +1,6 @@
-import 'dotenv/config'
-const { PORT, DEPLOY_DATABASE, LOCAL_DATABASE, NODE_ENV } = process.env
+import "dotenv/config";
+const { PORT, DEPLOY_DATABASE, LOCAL_DATABASE, NODE_ENV, EMAIL_PASSWORD } =
+  process.env;
 
 const DATABASE_CONFIG = NODE_ENV
   ? {
@@ -20,6 +21,16 @@ const DATABASE_CONFIG = NODE_ENV
         logging: false,
         native: false,
       },
-    }
+    };
 
-export { PORT, DATABASE_CONFIG }
+export const NODEMAILER_CONFIG = {
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // Use `true` for port 465, `false` for all other ports
+  auth: {
+    user: "nyellove1998@gmail.com",
+    pass: EMAIL_PASSWORD,
+  },
+};
+
+export { PORT, DATABASE_CONFIG };
