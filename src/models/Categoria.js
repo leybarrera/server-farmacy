@@ -1,8 +1,8 @@
-import { DataTypes } from 'sequelize'
+import { DataTypes } from "sequelize";
 
 const CategoriaModel = (conn) => {
   conn.define(
-    'Categoria',
+    "Categoria",
     {
       id: {
         type: DataTypes.UUID,
@@ -14,11 +14,15 @@ const CategoriaModel = (conn) => {
         allowNull: false,
         unique: true,
       },
+      imagen: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       timestamps: false,
     }
-  )
-}
+  );
+};
 
-export default CategoriaModel
+export default CategoriaModel;

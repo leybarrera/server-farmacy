@@ -40,6 +40,11 @@ const UsuarioModel = (conn) => {
         values: ["male", "female", "custom"],
         defaultValue: "custom",
       },
+      rol: {
+        type: DataTypes.ENUM,
+        values: ["admin", "client"],
+        defaultValue: "client",
+      },
     },
     {
       timestamps: false,

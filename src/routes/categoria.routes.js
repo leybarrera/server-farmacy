@@ -5,5 +5,6 @@ const categoriaRouter = Router();
 
 categoriaRouter.get("/", categoriaControllers.listarCategorias);
 categoriaRouter.post("/", categoriaControllers.crearCategoria);
+categoriaRouter.delete("/delete/:id", categoriaControllers.borrarCategoria);
 
 export default categoriaRouter;

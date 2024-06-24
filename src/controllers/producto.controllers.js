@@ -26,7 +26,8 @@ const crearProducto = async (req, res) => {
           message: "Este producto ya existe",
         });
   } catch (error) {
-    return req.status(500).json({
+    console.log(error);
+    return res.status(500).json({
       message: "Error interno en el servidor",
     });
   }
@@ -37,10 +38,29 @@ const listarProductos = async (req, res) => {
     const productos = await Producto.findAll({});
     return res.status(200).json({ productos });
   } catch (error) {
-    return req.status(500).json({
+    return res.status(500).json({
+      message: "Error interno en el servidor",
+    });
+  }
+};
+const borrarProducto = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteProductos = await Producto.destroy({
+      where: { id },
+    });
+    return deleteProductos > 0
+      ? res.status(201).json({
+          message: "Producto elimiando",
+        })
+      : res.status(400).json({
+          message: "No se pudo eliminar al producto",
+        });
+  } catch (error) {
+    return res.status(500).json({
       message: "Error interno en el servidor",
     });
   }
 };
 
-export default { listarProductos, crearProducto };
+export default { listarProductos, crearProducto, borrarProducto };

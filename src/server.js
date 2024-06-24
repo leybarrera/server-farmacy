@@ -1,42 +1,34 @@
-import express from 'express'
-import cors from 'cors'
-import morgan from 'morgan'
-import nodemailer from 'nodemailer'
-import rootRouter from './routes/index.routes.js'
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import nodemailer from "nodemailer";
+import rootRouter from "./routes/index.routes.js";
+import { NODEMAILER_CONFIG } from "./config/config.js";
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // Use `true` for port 465, `false` for all other ports
-  auth: {
-    user: 'nyellove1998@gmail.com',
-    pass: process.env.EMAIL_PASSWORD,
-  },
-})
+const transporter = nodemailer.createTransport(NODEMAILER_CONFIG);
 
-const server = express()
+const server = express();
 
-server.use(morgan('dev'))
-server.use(express.json())
-server.use(cors())
+server.use(morgan("dev"));
+server.use(express.json());
+server.use(cors());
 
-server.use('/', rootRouter)
+server.use("/", rootRouter);
 
-server.post('/sendEmail', async (req, res) => {
-  const { nombre, email, mensaje } = req.body
-  console.log(nombre, email, mensaje)
+server.post("/sendEmail", async (req, res) => {
+  const { nombre, email, mensaje } = req.body;
   transporter.sendMail({
-    from: 'nyellove1998@gmail.com',
+    from: "nyellove1998@gmail.com",
     to: email,
-    subject: 'BUENASALUD',
+    subject: "BUENASALUD",
     text: `Hola, ${nombre} te saludamos de BUENASALUD hemos recibio tu mensaje: "${mensaje}". pronto responderemos a tu petición`,
-  })
+  });
 
-  res.send('Email enviado')
-})
+  res.send("Email enviado");
+});
 
-server.get('/', (req, res) => {
-  res.send('Hola')
-})
+server.get("/", (req, res) => {
+  res.send("Hola");
+});
 
-export default server
+export default server;
