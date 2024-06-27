@@ -1,18 +1,23 @@
+import { ADMIN_SECRET_PASSWORD } from "../config/config.js";
+import bcryptHelper from "../helpers/bcrypt/bcrypt.helper.js";
 import { Usuario } from "../lib/connection.js";
 
 export const loadUserAdmin = async () => {
   try {
     const users = await Usuario.findAll({});
     if (users.length === 0) {
+      const passwordHashed = await bcryptHelper.hashPassword(
+        ADMIN_SECRET_PASSWORD
+      );
       await Usuario.create({
         nombre: "Leyn",
         apellido: "Barrera",
         sexo: "male",
         rol: "admin",
         email: "nyellove1998@gmail.com",
-        contraseña: "a12b32*",
-        cedula: "0940501596",
-        fecha_nacimiento: "09-05-1996",
+        contraseña: passwordHashed,
+        cedula: "0952577393",
+        fecha_nacimiento: "05/11/1998",
       });
     }
   } catch (error) {

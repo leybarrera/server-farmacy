@@ -1,6 +1,12 @@
 import "dotenv/config";
-const { PORT, DEPLOY_DATABASE, LOCAL_DATABASE, NODE_ENV, EMAIL_PASSWORD } =
-  process.env;
+const {
+  PORT,
+  DEPLOY_DATABASE,
+  LOCAL_DATABASE,
+  NODE_ENV,
+  EMAIL_PASSWORD,
+  ADMIN_SECRET_PASSWORD,
+} = process.env;
 
 const DATABASE_CONFIG = NODE_ENV
   ? {
@@ -33,4 +39,4 @@ export const NODEMAILER_CONFIG = {
   },
 };
 
-export { PORT, DATABASE_CONFIG };
+export { PORT, DATABASE_CONFIG, ADMIN_SECRET_PASSWORD };

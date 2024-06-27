@@ -33,7 +33,7 @@ const UsuarioModel = (conn) => {
         allowNull: false,
       },
       fecha_nacimiento: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
       },
       sexo: {
         type: DataTypes.ENUM,
@@ -44,6 +44,11 @@ const UsuarioModel = (conn) => {
         type: DataTypes.ENUM,
         values: ["admin", "client"],
         defaultValue: "client",
+      },
+
+      isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
     {
