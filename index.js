@@ -4,7 +4,7 @@ import { conn } from './src/lib/connection.js';
 import { loadUserAdmin } from './src/scripts/seed.script.js';
 const port = PORT ?? 3000;
 conn
-  .sync({ logging: false, force: false, alter: true })
+  .sync({ logging: false, force: true, alter: true })
   .then(() => {
     console.log('Base de datos conectada');
     server.listen(port, () => {
