@@ -19,7 +19,7 @@ const crearVenta = async (req, res) => {
     if (venta) {
       for (let product of products) {
         await DetalleVenta.create({
-          ...product,
+          cantidad: product.cantidad,
           producto: product.nombre,
           precioUnitario: product.precio,
           subTotal: Number(product.precio) * Number(product.cantidad),
