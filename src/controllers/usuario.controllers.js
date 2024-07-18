@@ -1,7 +1,9 @@
-import { Op } from "sequelize";
-import { Usuario } from "../lib/connection.js";
-import bcryptHelper from "../helpers/bcrypt/bcrypt.helper.js";
-import { format } from "date-fns";
+import { Op } from 'sequelize';
+import { Usuario } from '../lib/connection.js';
+import bcryptHelper from '../helpers/bcrypt/bcrypt.helper.js';
+import { format } from 'date-fns';
+import randomString from 'random-string';
+import nodemailer from '../helpers/nodemailer/index.js';
 const registrarUsuario = async (req, res) => {
   try {
     const {
@@ -16,7 +18,7 @@ const registrarUsuario = async (req, res) => {
 
     if (!nombre || !email || !contraseña)
       return res.status(400).json({
-        message: "Todos los datos son obligatorios",
+        message: 'Todos los datos son obligatorios',
       });
     const passwordHashed = await bcryptHelper.hashPassword(contraseña);
 
@@ -28,21 +30,21 @@ const registrarUsuario = async (req, res) => {
       },
       defaults: {
         ...req.body,
-        fecha_nacimiento: format(fecha_nacimiento, "dd/MM/yyyy"),
+        fecha_nacimiento: format(fecha_nacimiento, 'dd/MM/yyyy'),
         contraseña: passwordHashed,
       },
     });
     return created
       ? res.status(200).json({
-          message: "Usuario registrado con éxito",
+          message: 'Usuario registrado con éxito',
         })
       : res.status(400).json({
-          message: "Ya existe un usuario con este email o cédula",
+          message: 'Ya existe un usuario con este email o cédula',
         });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: "Error interno en el servidor",
+      message: 'Error interno en el servidor',
     });
   }
 };
@@ -52,7 +54,7 @@ const login = async (req, res) => {
     const { email, contraseña } = req.body;
     if (!email || !contraseña)
       return res.status(400).json({
-        message: "El usuario y contraseña es obligatorio",
+        message: 'El usuario y contraseña es obligatorio',
       });
 
     const usuario = await Usuario.findOne({
@@ -62,7 +64,7 @@ const login = async (req, res) => {
     });
     if (!usuario)
       return res.status(401).json({
-        message: "Usuario no registrado",
+        message: 'Usuario no registrado',
       });
 
     const isValidPassword = await bcryptHelper.comparePassword(
@@ -71,7 +73,7 @@ const login = async (req, res) => {
     );
     if (!isValidPassword)
       return res.status(401).json({
-        message: "Credenciales incorrectas",
+        message: 'Credenciales incorrectas',
       });
 
     return res.status(200).json({
@@ -87,7 +89,7 @@ const login = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Error interno en el sevidor",
+      message: 'Error interno en el sevidor',
     });
   }
 };
@@ -102,7 +104,7 @@ const listarUsuarios = async (req, res) => {
     return res.status(200).json({ usuarios });
   } catch (error) {
     return res.status(500).json({
-      message: "Error interno en el servidor",
+      message: 'Error interno en el servidor',
     });
   }
 };
@@ -116,7 +118,7 @@ const listaTodosUsuarios = async (req, res) => {
     return res.status(200).json({ usuarios });
   } catch (error) {
     return res.status(500).json({
-      message: "Error interno en el servidor",
+      message: 'Error interno en el servidor',
     });
   }
 };
@@ -132,17 +134,17 @@ const borrarUsuario = async (req, res) => {
     });
     if (!usuario)
       return res.status(400).json({
-        message: "Este usuario ya ha sido eliminado",
+        message: 'Este usuario ya ha sido eliminado',
       });
 
     usuario.isDeleted = true;
     await usuario.save();
     return res.status(200).json({
-      message: "Usuario eliminado con éxito",
+      message: 'Usuario eliminado con éxito',
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Error interno en el servidor",
+      message: 'Error interno en el servidor',
     });
   }
 };
@@ -158,15 +160,106 @@ const recuperarUsuario = async (req, res) => {
     });
     if (!usuario)
       return res.status(400).json({
-        message: "Usuario no válido",
+        message: 'Usuario no válido',
       });
 
     usuario.isDeleted = false;
     await usuario.save();
     return res.status(200).json({
-      message: "Usuario recuperado con éxito",
+      message: 'Usuario recuperado con éxito',
     });
   } catch (error) {}
+};
+
+const recuperarContraseña = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const usuario = await Usuario.findOne({
+      where: {
+        email,
+      },
+    });
+    if (!usuario)
+      return res.status(200).json({
+        message:
+          'Si este email esta registrado. Recibirá un correo con un código de verificación para poder continuar.',
+      });
+
+    const codigo = randomString({
+      length: 6,
+      letters: true,
+    });
+    usuario.recoveryPasswordCode = codigo;
+    await usuario.save();
+    nodemailer.recuperarContraseña(
+      email,
+      usuario.nombre + ' ' + usuario.apellido,
+      codigo
+    );
+
+    return res.status(200).json({
+      message:
+        'Si este email esta registrado. Recibirá un correo con un código de verificación para poder continuar',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Error interno en el servidor',
+    });
+  }
+};
+
+const verificarCodigo = async (req, res) => {
+  try {
+    const { codigo, email } = req.body;
+    const usuario = await Usuario.findOne({
+      where: {
+        email,
+        recoveryPasswordCode: codigo,
+      },
+    });
+    return usuario
+      ? res.status(200).json({
+          message: 'Código verificado con éxito. Ingrese la nueva contraseña.',
+        })
+      : res.status(400).json({
+          message:
+            'Código y/o email inválido. Intente de nuevo o contacte con un administrador.',
+        });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: 'Error interno en el servidor',
+    });
+  }
+};
+const cambiarContraseña = async (req, res) => {
+  try {
+    const { email, contraseña } = req.body;
+    const hashPassword = await bcryptHelper.hashPassword(contraseña);
+    const [updated] = await Usuario.update(
+      {
+        contraseña: hashPassword,
+        recoveryPasswordCode: null,
+      },
+      {
+        where: {
+          email,
+        },
+      }
+    );
+    return updated
+      ? res.status(200).json({
+          message: 'Contraseña actualizada con éxito. Inicia sesión.',
+        })
+      : res.status(400).json({
+          message:
+            'Error. No se pudo actualizar la contraseña. Intente otra vez.',
+        });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Error interno en el servidor',
+    });
+  }
 };
 
 export default {
@@ -176,4 +269,7 @@ export default {
   borrarUsuario,
   listaTodosUsuarios,
   recuperarUsuario,
+  recuperarContraseña,
+  verificarCodigo,
+  cambiarContraseña,
 };

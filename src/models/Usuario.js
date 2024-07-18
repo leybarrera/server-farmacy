@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
+import { DataTypes } from 'sequelize';
 
 const UsuarioModel = (conn) => {
   conn.define(
-    "Usuario",
+    'Usuario',
     {
       id: {
         type: DataTypes.UUID,
@@ -37,13 +37,16 @@ const UsuarioModel = (conn) => {
       },
       sexo: {
         type: DataTypes.ENUM,
-        values: ["male", "female", "custom"],
-        defaultValue: "custom",
+        values: ['male', 'female', 'custom'],
+        defaultValue: 'custom',
+      },
+      recoveryPasswordCode: {
+        type: DataTypes.STRING,
       },
       rol: {
         type: DataTypes.ENUM,
-        values: ["admin", "client"],
-        defaultValue: "client",
+        values: ['admin', 'client'],
+        defaultValue: 'client',
       },
 
       isDeleted: {

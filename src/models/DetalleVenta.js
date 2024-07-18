@@ -1,40 +1,35 @@
 import { DataTypes } from 'sequelize';
 
-const ProductoModel = (conn) => {
-  conn.define(
-    'Producto',
+const DetalleVentaModel = (sequelize) => {
+  sequelize.define(
+    'DetalleVenta',
     {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
-      nombre: {
+      producto: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
-      precio: {
+      precioUnitario: {
         type: DataTypes.FLOAT,
         allowNull: false,
-        validate: {
-          min: 1.0,
-        },
       },
-      descripcion: {
-        type: DataTypes.TEXT,
+      cantidad: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
-      imagen: {
-        type: DataTypes.TEXT,
+      subTotal: {
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
-
-      CategoryId: {
+      VentaId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'Categoria',
+          model: 'Venta',
           key: 'id',
         },
       },
@@ -45,4 +40,4 @@ const ProductoModel = (conn) => {
   );
 };
 
-export default ProductoModel;
+export default DetalleVentaModel;

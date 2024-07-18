@@ -1,28 +1,33 @@
-import { Sequelize } from 'sequelize'
-import { DATABASE_CONFIG } from '../config/config.js'
+import { Sequelize } from 'sequelize';
+import { DATABASE_CONFIG } from '../config/config.js';
 import {
   CategoriaModel,
+  DetalleVentaModel,
   ProductoModel,
   UsuarioModel,
   VentaModel,
-} from '../models/index.js'
+} from '../models/index.js';
 
-const conn = new Sequelize(DATABASE_CONFIG.URI, DATABASE_CONFIG.CONFIG)
+const conn = new Sequelize(DATABASE_CONFIG.URI, DATABASE_CONFIG.CONFIG);
 
-CategoriaModel(conn)
-ProductoModel(conn)
-UsuarioModel(conn)
-VentaModel(conn)
+CategoriaModel(conn);
+ProductoModel(conn);
+UsuarioModel(conn);
+VentaModel(conn);
+DetalleVentaModel(conn);
 
-const { Categoria, Producto, Usuario, Venta } = conn.models
+const { Categoria, Producto, Usuario, Venta, DetalleVenta } = conn.models;
 
-Categoria.hasMany(Producto)
-Producto.belongsTo(Categoria)
+Categoria.hasMany(Producto);
+Producto.belongsTo(Categoria);
 
-Producto.hasMany(Venta)
-Venta.belongsTo(Producto)
+Producto.hasMany(Venta);
+Venta.belongsTo(Producto);
 
-Usuario.hasMany(Venta)
-Venta.belongsTo(Usuario)
+Usuario.hasMany(Venta);
+Venta.belongsTo(Usuario);
 
-export { conn, Categoria, Producto, Venta, Usuario }
+Venta.hasMany(DetalleVenta);
+DetalleVenta.belongsTo(Venta);
+
+export { conn, Categoria, Producto, Venta, Usuario, DetalleVenta };

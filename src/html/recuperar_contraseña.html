@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recuperación de Contraseña</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .email-container {
+        background-color: #ffffff;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        padding-bottom: 20px;
+      }
+      .header img {
+        width: 350px;
+      }
+      .content {
+        text-align: center;
+        color: #333333;
+      }
+      .content h1 {
+        color: #1a1a1a;
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .content p {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      .code {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 24px;
+        color: #ffffff;
+        background-color: #007bff;
+        border-radius: 8px;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+      }
+      .footer {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid #dddddd;
+        font-size: 12px;
+        color: #777777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <img
+          src="https://farmaciasbuenasalud.cl/s/img/wp-content/uploads/2020/12/logotipo.png"
+          alt="Logo Farmacia Buena Salud"
+        />
+      </div>
+      <div class="content">
+        <h1>Recuperación de Contraseña</h1>
+        <p>Estimado/a ${NOMBRE_CLIENTE},</p>
+        <p>
+          Hemos recibido una solicitud para restablecer su contraseña. Por
+          favor, use el siguiente código para completar el proceso de
+          recuperación:
+        </p>
+        <div class="code">${RECOVERY_CODE}</div>
+        <p>
+          Si no solicitó restablecer su contraseña, por favor ignore este
+          correo.
+        </p>
+        <p>Gracias,</p>
+        <p>El equipo de Farmacia Buena Salud</p>
+      </div>
+      <div class="footer">
+        <p>&copy; 2024 Farmacia Buena Salud. Todos los derechos reservados.</p>
+        <p>
+          Este es un mensaje automático, por favor no responda a este correo.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

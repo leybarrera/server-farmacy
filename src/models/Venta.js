@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
+import { DataTypes } from 'sequelize';
 
 const VentaModel = (conn) => {
   conn.define(
-    "Venta",
+    'Venta',
     {
       id: {
         type: DataTypes.UUID,
@@ -10,25 +10,29 @@ const VentaModel = (conn) => {
         defaultValue: DataTypes.UUIDV4,
       },
 
-      cantidad: {
+      monto: {
         type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      cedula: {
-        type: DataTypes.STRING,
         allowNull: false,
       },
       fecha: {
         type: DataTypes.DATE,
         defaultValue: Date.now(),
       },
-      ProductId: {
+      UsuarioId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "Productos",
-          key: "id",
+          model: 'Usuarios',
+          key: 'id',
         },
+      },
+      voucher: {
+        type: DataTypes.STRING,
+      },
+      status: {
+        type: DataTypes.ENUM,
+        values: ['Pendiente', 'Procesando', 'Rechazado', 'Pagado'],
+        defaultValue: 'Pendiente',
       },
     },
     {

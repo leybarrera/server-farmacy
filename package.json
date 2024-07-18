@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "5.1.1",
+    "cloudinary": "^2.3.0",
     "cors": "2.8.5",
     "date-fns": "3.6.0",
     "dotenv": "16.4.5",
@@ -20,6 +21,7 @@
     "nodemailer": "6.9.13",
     "pg": "8.12.0",
     "pg-hstore": "2.3.4",
+    "random-string": "0.2.0",
     "sequelize": "6.37.3"
   }
 }

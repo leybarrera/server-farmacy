@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
+import { DataTypes } from 'sequelize';
 
 const CategoriaModel = (conn) => {
   conn.define(
-    "Categoria",
+    'Categoria',
     {
       id: {
         type: DataTypes.UUID,
@@ -13,6 +13,10 @@ const CategoriaModel = (conn) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+      },
+      descripcion: {
+        type: DataTypes.TEXT,
+        allowNull: false,
       },
       imagen: {
         type: DataTypes.STRING,
