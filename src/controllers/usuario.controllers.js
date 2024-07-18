@@ -16,31 +16,43 @@ const registrarUsuario = async (req, res) => {
       sexo,
     } = req.body;
 
-    if (!nombre || !email || !contraseña)
+    if (
+      !nombre ||
+      !email ||
+      !contraseña ||
+      !cedula ||
+      !apellido ||
+      !sexo ||
+      !fecha_nacimiento
+    )
       return res.status(400).json({
         message: 'Todos los datos son obligatorios',
       });
     const passwordHashed = await bcryptHelper.hashPassword(contraseña);
-
-    const [usuario, created] = await Usuario.findOrCreate({
+    const usuarioExist = await Usuario.findOne({
       where: {
-        [Op.or]: {
-          email,
-        },
-      },
-      defaults: {
-        ...req.body,
-        fecha_nacimiento: format(fecha_nacimiento, 'dd/MM/yyyy'),
-        contraseña: passwordHashed,
+        [Op.or]: [{ email }, { cedula }],
       },
     });
-    return created
-      ? res.status(200).json({
-          message: 'Usuario registrado con éxito',
-        })
-      : res.status(400).json({
-          message: 'Ya existe un usuario con este email o cédula',
-        });
+    if (usuarioExist)
+      return res.status(400).json({
+        message: 'Error al registrar. Datos duplicados.',
+      });
+    const birthDate = format(fecha_nacimiento, 'dd/MM/yyyy');
+    const usuario = await Usuario.create({
+      nombre,
+      apellido,
+      email,
+      contraseña: passwordHashed,
+      fecha_nacimiento: birthDate,
+      cedula,
+      sexo,
+    });
+    return usuario
+      ? res.status(201).json({ message: 'Registro completado con éxito' })
+      : res
+          .status(400)
+          .json({ message: 'Usuario no registrado. Intente de nuevo.' });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
