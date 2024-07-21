@@ -4,8 +4,8 @@ import cloudinaryHelper from '../helpers/cloudinary/cloudinary.helper.js';
 
 const crearProducto = async (req, res) => {
   try {
-    const { nombre, precio, imagen, CategoryId } = req.body;
-    if (!nombre || !precio || !imagen || !CategoryId)
+    const { nombre, precio, imagen, CategoryId, descripcion } = req.body;
+    if (!nombre || !precio || !imagen || !CategoryId || !descripcion)
       return res.status(400).json({
         message: 'Datos del producto incompleto',
       });
@@ -18,7 +18,7 @@ const crearProducto = async (req, res) => {
           [Op.iLike]: `%${nombre}%`,
         },
       },
-      defaults: { nombre, precio, imagen: url_image, CategoryId },
+      defaults: { nombre, precio, descripcion, imagen: url_image, CategoryId },
     });
 
     return created
