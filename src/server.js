@@ -12,7 +12,7 @@ const server = express();
 server.use(morgan('dev'));
 server.use(
   express.json({
-    limit: '500mb',
+    limit: '50mb',
   })
 );
 server.use(cors());
